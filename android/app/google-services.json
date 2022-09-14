@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "312371044483",
+    "project_id": "rpsfest-20454",
+    "storage_bucket": "rpsfest-20454.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312371044483:android:e1408d3629d50ca0557bb6",
+        "android_client_info": {
+          "package_name": "com.example.rpsfest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312371044483-5flav42qt4stg7vhguafhipd5h5riqh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rpsfest",
+            "certificate_hash": "55f6bbb061ae8d19ca3aed3c0e01fdb77bd0809b"
+          }
+        },
+        {
+          "client_id": "312371044483-rmu7ldstmpfu6mofgle63th4u41cbabe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBS3JlIlu-RMtlniRqQO1rU2rUFy7E5v4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312371044483-rmu7ldstmpfu6mofgle63th4u41cbabe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
