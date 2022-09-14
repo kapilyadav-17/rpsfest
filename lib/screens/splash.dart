@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rpsfest/screens/dummy.dart';
+import 'package:rpsfest/screens/tabs.dart';
 import 'package:rpsfest/services/auth.dart';
 
 import '../provider/tool.dart';
@@ -24,10 +24,10 @@ class _SplashState extends State<Splash> {
     Future.delayed(Duration(milliseconds: 2000),(){
       if(_authService.currentUser!=null){
         //print(_authService.currentUser.)
-        Navigator.pushNamed(context, HomePage.routeName);
+        Navigator.pushReplacementNamed(context, Tabs.routeName);
       }
       else{
-        Navigator.pushNamed(context, Login.routeName);
+        Navigator.pushReplacementNamed(context, Login.routeName);
       }
     });
 

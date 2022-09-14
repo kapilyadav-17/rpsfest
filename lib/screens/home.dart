@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:rpsfest/screens/profilepage.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 class Home extends StatefulWidget {
-  Home({required this.navigatorKey});
+  //Home({required this.navigatorKey});
 
 
-  final GlobalKey navigatorKey;
+  //final GlobalKey navigatorKey;
 
   @override
   _HomeState createState() => _HomeState();

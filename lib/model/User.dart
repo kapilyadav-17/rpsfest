@@ -8,6 +8,7 @@ class User {
   late String specialization;//bca no branch
   late String profilePhoto;
   List<Event>? registeredEvents;
-  User({required this.email,required this.name,required this.course, this.specialization='',this.profilePhoto='',this.registeredEvents});
+  late bool isadmin;
+  User({required this.isadmin,required this.email,required this.name,required this.course, this.specialization='',this.profilePhoto='',this.registeredEvents});
 
 }

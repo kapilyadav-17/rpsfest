@@ -1,53 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:rpsfest/screens/events.dart';
 
 import 'home.dart';
 
-class HomePage extends StatefulWidget {
-  static const routeName = '/dummyPage';
+class Tabs extends StatefulWidget {
+  const Tabs({Key? key}) : super(key: key);
+  static const routeName = '/tabsPage';
   @override
-  _HomePageState createState() => _HomePageState();
+  _TabsState createState() => _TabsState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TabsState extends State<Tabs> {
   int _pageIndex = 0;
-
   Map<int, GlobalKey> navigatorKeys = {
     0: GlobalKey(),
     1: GlobalKey(),
 
   };
+  List pages =[
+    Home(
 
-  get developer => null;
 
+    ),
+    EventPage(
+
+    ),
+
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: WillPopScope(
-          onWillPop: () async {
-            developer.log(
-                'On Will called ${navigatorKeys[_pageIndex]?.currentState?.context.widget}');
-            // return !await navigatorKeys[_pageIndex].currentState.context;
-            return !await Navigator.maybePop(
-                navigatorKeys[_pageIndex]!.currentState!.context);
-            // Navigator.pop(navigatorKeys[_pageIndex].currentState.context);
-          },
-          child: IndexedStack(
-            index: _pageIndex,
-            children: <Widget>[
-              Home(
-
-                navigatorKey: navigatorKeys[0]!,
-              ),
-              NavigatorPage(
-                child: Text('Events'),
-                navigatorKey: navigatorKeys[1]!,
-              ),
-
-            ],
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
@@ -70,11 +52,87 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+      body: SafeArea(
+        child: pages[_pageIndex],
+      ),
     );
   }
 }
 
 
+// class Tabs extends StatefulWidget {
+//   static const routeName = '/tabsPage';
+//   @override
+//   _TabsState createState() => _TabsState();
+// }
+
+// class _TabsState extends State<Tabs> {
+//   int _pageIndex = 0;
+//
+//   Map<int, GlobalKey> navigatorKeys = {
+//     0: GlobalKey(),
+//     1: GlobalKey(),
+//
+//   };
+//
+//   get developer => null;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: WillPopScope(
+//           onWillPop: () async {
+//             developer.log(
+//                 'On Will called ${navigatorKeys[_pageIndex]?.currentState?.context.widget}');
+//             // return !await navigatorKeys[_pageIndex].currentState.context;
+//             return !await Navigator.maybePop(
+//                 navigatorKeys[_pageIndex]!.currentState!.context);
+//             // Navigator.pop(navigatorKeys[_pageIndex].currentState.context);
+//           },
+//           child: IndexedStack(
+//             index: _pageIndex,
+//             children: <Widget>[
+//               Home(
+//
+//                 navigatorKey: navigatorKeys[0]!,
+//               ),
+//               EventPage(
+//                 navigatorKey: navigatorKeys[1]!,
+//               ),
+//
+//             ],
+//           ),
+//         ),
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         type: BottomNavigationBarType.fixed,
+//         items: const <BottomNavigationBarItem>[
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label:'Home',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.people),
+//             label: 'Events',
+//           ),
+//
+//         ],
+//         currentIndex: _pageIndex,
+//         onTap: (int index) {
+//           setState(
+//                 () {
+//               _pageIndex = index;
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+/*
+//IGNORE THIS CODE
 
 class NavigatorPage extends StatefulWidget {
   NavigatorPage({required this.navigatorKey, required this.child});
@@ -106,56 +164,19 @@ class _NavigatorPageState extends State<NavigatorPage> {
           settings: settings,
           builder: (BuildContext context) {
             return Scaffold(
-              appBar: AppBar(
-                title: widget.child,
-                centerTitle: true,
-              ),
-              body: Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: 10.0,
-                  horizontal: 20.0,
-                ),
-                child: ListView(
-                  children: List.generate(
-                    50,
-                        (index) {
-                      return Card(
-                        child: ListTile(
-                          leading: FlutterLogo(),
-                          title: Text('${index + 1} Item'),
-                          enabled: true,
-                          onTap: () {
-                            if (_currentRoute != index) {
-                              _textEditingController = TextEditingController();
-                            }
-                            _currentRoute = index;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return /*DetailRoute(
-                                    textEditingController:
-                                    _textEditingController,
-                                    index: index,
-                                  );*/
-                                  RegistrationForm();
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+
+              body:
             );
           },
         );
       },
     );
   }
-}
+}*/
 
+
+/*
+//IGNORE THIS CODE
 class DetailRoute extends StatelessWidget {
   DetailRoute({required this.textEditingController, required this.index});
 
@@ -176,7 +197,12 @@ class DetailRoute extends StatelessWidget {
     );
   }
 }
+*/
 
+
+/*
+//IGNORE THIS CODE
+//TODO implement this when user account creation
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({Key? key}) : super(key: key);
 
@@ -246,7 +272,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 }
 
-class RegisterFormCard extends StatefulWidget {
+
+class RegisterFormCard extends StatefulWidget{
   const RegisterFormCard({Key? key}) : super(key: key);
 
   @override
@@ -360,3 +387,32 @@ class _RegisterFormCardState extends State<RegisterFormCard> {
     );
   }
 }
+*/
+/*
+
+Card(
+                        child: ListTile(
+                          leading: FlutterLogo(),
+                          title: Text('${index + 1} Item'),
+                          enabled: true,
+                          onTap: () {
+                            if (_currentRoute != index) {
+                              _textEditingController = TextEditingController();
+                            }
+                            _currentRoute = index;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return /*DetailRoute(
+                                    textEditingController:
+                                    _textEditingController,
+                                    index: index,
+                                  );*/
+                                  RegistrationForm();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      );
+ */

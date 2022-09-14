@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:rpsfest/screens/dummy.dart';
+import 'package:rpsfest/screens/tabs.dart';
 class UserDetailPage extends StatefulWidget {
   //const UserDetailPage({Key? key}) : super(key: key);
   static const routeName = '/userDetail';
@@ -126,7 +126,7 @@ class _UserDetailState extends State<UserDetail> {
       isloading=true;
     });
     //apicall
-    Navigator.of(context).pushNamed(HomePage.routeName);
+    Navigator.of(context).pushNamed(Tabs.routeName);
     setState(() {
       isloading=false;
     });

@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rpsfest/screens/dummy.dart';
+import 'package:rpsfest/screens/tabs.dart';
 import 'package:rpsfest/screens/userdetail.dart';
 import 'package:rpsfest/services/auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../provider/authapi.dart';
+
 import '../provider/tool.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 class Login extends StatefulWidget {
   //const Login({Key? key}) : super(key: key);
   static const routeName = '/loginPage';
@@ -18,70 +18,65 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
+  AuthService _authService = AuthService.instance;
+  StreamSubscription<User?>? _authChangeSubscription;
+
+
+
+
+  StreamSubscription? connection;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _authChangeSubscription = _authService.authStateChanges().listen((user) {
+      if (user != null) {
+        Navigator.pushNamed(context, Tabs.routeName);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final internetConn = Provider.of<Tool>(context).connectivity;
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if(internetConn==ConnectivityResult.none){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('no internet connection')));
+      }
+      else{
+        print(internetConn);
+      }
+    });
     return Scaffold(
       key: scaffoldKey,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [0, 1],
-            )),
-          ),
-          SingleChildScrollView(
-            child: Container(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                      child: Container(
-                    margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
-                    child: Text(
-                      'TechFest',
-                      style: TextStyle(
-                          color: Colors.amberAccent,
-                          fontFamily: 'Anton',
-                          fontSize: 50,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 60),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
-                          )
-                        ]),
-                  )),
-                  Flexible(
-                    child: AuthCard(),
-                    flex: deviceSize.width > 600 ? 2 : 1,
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.2,
+                  vertical: MediaQuery.of(context).size.height * 0.02),
+              child: ElevatedButton(
+                  onPressed: () {
+                    _authService.signinwithgoogle();
+                  },
+                  child: Text("Sign in with Google")),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
+/*
+// IGNORE REST OF THE CODE OF THIS PAGE
 class AuthCard extends StatefulWidget {
   const AuthCard({Key? key}) : super(key: key);
 
@@ -103,37 +98,7 @@ class _AuthCardState extends State<AuthCard> {
   bool isoffline = false;
   @override
   void initState() {
-    // TODO: implement initState
-    connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      // whenevery connection status is changed.
-      if(result == ConnectivityResult.none){
-        //there is no any connection
-        setState(() {
-          isoffline = true;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('offline')));
-      }else if(result == ConnectivityResult.mobile){
-        //connection is mobile data network
-        setState(() {
-          isoffline = false;
-        });
-      }else if(result == ConnectivityResult.wifi){
-        //connection is from wifi
-        setState(() {
-          isoffline = false;
-        });
-      }else if(result == ConnectivityResult.ethernet){
-        //connection is from wired connection
-        setState(() {
-          isoffline = false;
-        });
-      }else if(result == ConnectivityResult.bluetooth){
-        //connection is from bluetooth threatening
-        setState(() {
-          isoffline = false;
-        });
-      }
-    });
+
     super.initState();
     _authChangeSubscription = _authService.authStateChanges().listen((user) {
       if (user != null) {
@@ -141,11 +106,7 @@ class _AuthCardState extends State<AuthCard> {
       }
     });
   }
-  @override
-  void dispose() {
-    connection!.cancel();
-    super.dispose();
-  }
+
   var isloading = false;
   final passcontroller = TextEditingController();
 
@@ -340,42 +301,4 @@ class _AuthCardState extends State<AuthCard> {
     );
   }
 }
-
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
-  @override
-  _SignInState createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
-  AuthService _authService = AuthService.instance;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.2,
-                vertical: MediaQuery.of(context).size.height * 0.02),
-            child: ElevatedButton(
-                onPressed: () {
-                  _authService.signinwithgoogle();
-                },
-                child: Text("Sign in with Google")),
-          )
-        ],
-      ),
-    );
-  }
-}
+*/
