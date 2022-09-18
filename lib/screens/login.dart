@@ -6,6 +6,7 @@ import 'package:rpsfest/screens/tabs.dart';
 import 'package:rpsfest/screens/userdetail.dart';
 import 'package:rpsfest/services/auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../provider/tool.dart';
 
@@ -22,9 +23,6 @@ class _LoginState extends State<Login> {
   AuthService _authService = AuthService.instance;
   StreamSubscription<User?>? _authChangeSubscription;
 
-
-
-
   StreamSubscription? connection;
 
   @override
@@ -37,38 +35,85 @@ class _LoginState extends State<Login> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final internetConn = Provider.of<Tool>(context).connectivity;
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      if(internetConn==ConnectivityResult.none){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('no internet connection')));
-      }
-      else{
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (internetConn == ConnectivityResult.none) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('no internet connection')));
+      } else {
         print(internetConn);
       }
     });
     return Scaffold(
       key: scaffoldKey,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.2,
-                  vertical: MediaQuery.of(context).size.height * 0.02),
-              child: ElevatedButton(
-                  onPressed: () {
-                    _authService.signinwithgoogle();
-                  },
-                  child: Text("Sign in with Google")),
-            )
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: deviceSize.height / 11,
+              ),
+              SafeArea(
+                  child: Text(
+                'Rpsfest',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 50.0),
+              )),
+              Text(
+                'Largest Science & Technology Festival',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+              
+              SizedBox(
+                height: deviceSize.height / 8,
+              ),
+              SvgPicture.asset("lib/images/login.svg"),
+              SizedBox(
+                height: deviceSize.height / 16,
+              ),
+              const Text(
+                "Join the Rpsfest Family",
+                style: TextStyle(
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Trajan Pro',
+                    fontStyle: FontStyle.italic),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.1,
+                    vertical: MediaQuery.of(context).size.height * 0.02),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 91, 5, 106),
+                        minimumSize: Size(double.infinity, 60)),
+                    onPressed: () {
+                      _authService.signinwithgoogle();
+                    },
+                    child: Text(
+                      "Sign in with Google",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

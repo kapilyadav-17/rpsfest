@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rpsfest/widgets/eventbanner.dart';
 
@@ -12,23 +13,31 @@ class EventPage extends StatefulWidget {
   @override
   _EventPageState createState() => _EventPageState();
 }
+
 class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
-    final eventsList = Provider
-        .of<EventProvider>(context)
-        .getEventsList;
+    final eventsList = Provider.of<EventProvider>(context).getEventsList;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Events'),
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            'Events',
+            style: GoogleFonts.lato(
+                color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
+          ),
         ),
         body: ListView.builder(
           itemBuilder: ((context, index) {
             return Column(
               children: [
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 EventBanner(eventId: eventsList[index].eventId),
-
               ],
             );
           }),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context)=>Tool()),
         ],
         child:MaterialApp(
+          debugShowCheckedModeBanner: false,
             title: 'TechFest',
             theme: ThemeData(
 
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
                   return Center(child: Text(snapshot.error.toString()));
                 }
                 else if(snapshot.hasData){
-                  return Splash();
+                  return Login();
                 }
                 else{
                   return Scaffold(body: Center(child: CircularProgressIndicator(),));
