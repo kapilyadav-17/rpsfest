@@ -36,7 +36,7 @@ class EventBanner extends StatelessWidget {
             child: Image.network(eventDetail.eventImage),
           ),
         ),
-        Positioned(child: Text(eventDetail.eventName,style: TextStyle(fontSize: 30,fontWeight:FontWeight.bold),),
+        Positioned(child: Text(eventDetail.eventName,style: TextStyle(color: Colors.white,fontSize: 30,fontWeight:FontWeight.bold),),
         top: height*0.1,
         left: width*0.2,),
         Positioned(child: Container(
@@ -44,7 +44,7 @@ class EventBanner extends StatelessWidget {
           child: Row(
             mainAxisAlignment:MainAxisAlignment.start ,
             children: [
-              Text('Explore',style: TextStyle(fontSize: 25,fontWeight:FontWeight.bold),),
+              Text('Explore',style: TextStyle(color: Colors.white,fontSize: 25,fontWeight:FontWeight.bold),),
               SizedBox(width: 20,),
               Icon(Icons.arrow_forward),
             ],

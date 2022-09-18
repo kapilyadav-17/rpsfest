@@ -41,8 +41,6 @@ class Tool with ChangeNotifier{
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     _connectionStatus = result;
-    if(_connectionStatus==ConnectionState.none){
-      notifyListeners();
-    }
+    notifyListeners();
   }
 }

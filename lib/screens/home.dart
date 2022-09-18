@@ -105,11 +105,11 @@ class _HomeState extends State<Home> {
             ),
 
             ListTile(
-              title: Text('Log out',
+              title: Text('Help and Support',
                   style: TextStyle(
                     fontSize: 18.0,
                   )),
-              leading: Icon(Icons.logout),
+              leading: Icon(Icons.help_center),
               onTap: () {
 
               },

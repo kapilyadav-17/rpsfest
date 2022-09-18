@@ -11,6 +11,8 @@ import 'package:rpsfest/provider/authapi.dart';
 import 'package:rpsfest/provider/eventProvider.dart';
 import 'package:rpsfest/provider/tool.dart';
 import 'package:rpsfest/provider/userProvider.dart';
+import 'package:rpsfest/screens/addEvent.dart';
+import 'package:rpsfest/screens/adminEvents.dart';
 import 'package:rpsfest/screens/tabs.dart';
 import 'package:rpsfest/screens/eventDetail.dart';
 import 'package:rpsfest/screens/login.dart';
@@ -18,6 +20,7 @@ import 'package:rpsfest/screens/profilepage.dart';
 import 'package:rpsfest/screens/events.dart';
 import 'package:rpsfest/screens/splash.dart';
 import 'package:rpsfest/screens/userdetail.dart';
+import 'package:rpsfest/screens/viewParticipants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,9 +70,12 @@ class MyApp extends StatelessWidget {
               ProfilePage.routeName: (ctx) => ProfilePage(),
               //Events.routeName: (ctx) => Events(),
               Tabs.routeName: (ctx) => Tabs(),
-              UserDetailPage.routeName: (ctx) => UserDetail(),
+              UserDetailPage.routeName: (ctx) => UserDetailPage(),
               Splash.routeName : (ctx) => Splash(),
               EventDetail.routeName: (ctx)=>EventDetail(),
+              AdminEvents.routeName : (ctx)=>AdminEvents(),
+              ViewParticipants.routeName: (ctx)=> ViewParticipants(),
+              AddEvent.routeName: (ctx)=> AddEvent(),
             }
         ));
   }

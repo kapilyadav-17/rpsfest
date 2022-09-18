@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:rpsfest/screens/tabs.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import '../services/auth.dart';
 class UserDetailPage extends StatefulWidget {
   //const UserDetailPage({Key? key}) : super(key: key);
   static const routeName = '/userDetail';
@@ -10,8 +13,8 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
-
-  File? pickedImage;
+  static final AuthService _authService = AuthService.instance;
+  static File? pickedImage;
   Future<void> pickImage() async {
     final ImagePicker imgpick = ImagePicker();
 
@@ -38,7 +41,22 @@ class _UserDetailPageState extends State<UserDetailPage> {
       });
     }
   }
-
+  static String? photoUrl;
+  static Future<void> getPhotoUrl()async{
+    if(pickedImage!=null){
+      try {
+        final ref = FirebaseStorage.instance.ref().child('profilePhoto').child(_authService.currentUser!.uid+'.jpeg');
+        await ref.putFile(pickedImage!);
+        photoUrl = await ref.getDownloadURL();
+      } on Exception catch (e) {
+        // TODO
+        print(e.toString());
+      }
+    }
+    else{
+      print('no image chosen');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -64,16 +82,18 @@ class _UserDetailPageState extends State<UserDetailPage> {
               height: deviceSize.height,
               width: deviceSize.width,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-
+                  SizedBox(height: 10,),
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [CircleAvatar(
-                    radius: 30,
-                    backgroundImage: pickedImage != null
-                        ? FileImage(pickedImage!)
-                        : null,
+                    radius: 70,
+                    // backgroundImage: pickedImage != null
+                    //     ? FileImage(pickedImage!)
+                    //     : NetworkImage(_authService.currentUser!.photoURL.toString()),
+                    child: pickedImage==null?Image.network(_authService.currentUser!.photoURL.toString(),fit: BoxFit.scaleDown,)
+                    :Image.file(pickedImage!,fit: BoxFit.cover,),
                   ),SizedBox(width: 10,),
                   IconButton(onPressed: (){
                     showModalBottomSheet(context: context, builder: (BuildContext context){
@@ -87,7 +107,8 @@ class _UserDetailPageState extends State<UserDetailPage> {
                       ),);
                     },);
                   }, icon: Icon(Icons.edit,color: Colors.blueAccent,))],),
-
+                  SizedBox(height: 10,),
+                  UserDetail(),
 
                 ],
               ),
@@ -109,10 +130,14 @@ class UserDetail extends StatefulWidget {
 
 class _UserDetailState extends State<UserDetail> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  Map<String,String> authData ={
+  final AuthService _authService = AuthService.instance;
+  Map<String,dynamic> authData ={
+    'profilePhoto':'',
+    'isAdmin':false,
+    'registeredEvents':[],
     'name':'',
-    'rollNo':'',
-    'phone':'',
+    'specialization':'',
+    'email':'',
     'course':'',
   };
   var isloading =false;
@@ -126,10 +151,22 @@ class _UserDetailState extends State<UserDetail> {
       isloading=true;
     });
     //apicall
-    Navigator.of(context).pushNamed(Tabs.routeName);
-    setState(() {
-      isloading=false;
+    await _UserDetailPageState.getPhotoUrl();
+    if(_UserDetailPageState.photoUrl!=null){
+      authData['profilePhoto']=_UserDetailPageState.photoUrl;
+    }
+    else{
+      authData['profilePhoto']=_authService.currentUser!.photoURL;
+    }
+    await FirebaseFirestore.instance.collection('users').doc(_authService.currentUser!.uid).set(authData).then((value) {
+      Navigator.of(context).pushNamed(Tabs.routeName);
+      setState(() {
+        isloading=false;
+      });
+    }).catchError((onError){
+      print(onError.toString());
     });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -150,47 +187,56 @@ class _UserDetailState extends State<UserDetail> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
-                  //keyboardType: TextInputType.a,
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return 'Enter Name';
-                    }
-                  },
+
+                  decoration: InputDecoration(labelText: 'name'),
+                  //keyboardType: TextInputType.phone,
+                  initialValue: _authService.currentUser!.displayName,
+                  validator:
+                      (value){if( value!.isEmpty){return 'enter name';}},
                   onSaved: (value){
                     authData['name']=value!;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'rollno'),
+                  decoration: InputDecoration(labelText: 'email'),
+                  //keyboardType: TextInputType.a,
+                  initialValue: _authService.currentUser!.email,
+                  enabled: false,
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Enter Email';
+                    }
+                  },
+                  onSaved: (value){
+                    authData['email']=value!;
+                  },
+
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'course'),
                   keyboardType: TextInputType.text,
 
                   validator: (value){
                     if(value!.isEmpty ){
-                      return 'Enter rollNo';
+                      return 'Enter Course';
                     }
                   },
 
                   onSaved: (value){
-                    authData['rollNo']=value!;
+                    authData['course']=value!;
                   },
                 ),
                 TextFormField(
 
-                  decoration: InputDecoration(labelText: 'course'),
+                  decoration: InputDecoration(labelText: 'specialization'),
 
                   validator:
-                      (value){if( value!.isEmpty){return 'enter course name';}},
-
+                      (value){if( value!.isEmpty){return 'enter specialization name';}},
+                  onSaved: (value){
+                    authData['specialization']=value!;
+                  },
                 ),
-                TextFormField(
 
-                  decoration: InputDecoration(labelText: 'phone'),
-                  keyboardType: TextInputType.phone,
-                  validator:
-                      (value){if( value!.length!=10){return 'invalid phone number';}},
-
-                ),
                 SizedBox(height: 20,),
                 if(isloading)
                   CircularProgressIndicator()

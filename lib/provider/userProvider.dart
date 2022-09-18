@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/User.dart';
 
 class UserProvider with ChangeNotifier{
-  User loggedInUser = User(name: 'Kapil Yadav',course: "Btech",specialization: "Cse",email: "kapilyadav9127@gmail.com",profilePhoto: '',registeredEvents: null,isadmin: true);
+  User loggedInUser = User(name: 'Kapil Yadav',course: "Btech",specialization: "Cse",email: "kapilyadav9127@gmail.com",profilePhoto: '',registeredEvents: ['e1'],isadmin: true);
 
   User get getloggedInUser => loggedInUser;
   //list of users for admin ??fb auth??==loggedin out
@@ -14,6 +14,9 @@ class UserProvider with ChangeNotifier{
   void initialseUser(User currentUser){
     //
   }
+  // User getUserData(String userId){
+  //
+  // }
   void deleteUserAccount(User currentUser){
 
   }
